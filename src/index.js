@@ -1,7 +1,7 @@
 import './style.css';
 
 const APPID = 'f7b60f6f82b5a121d3e5692ae0173a3d';
-const baseURL = 'http://api.openweathermap.org/data/2.5/weather';
+const baseURL = 'https://api.openweathermap.org/data/2.5/weather';
 
 const loader = () => {
   const resultDiv = document.querySelector('.result');
