@@ -27,4 +27,31 @@ const weather = (weatherJson) => {
     return { "kelvin" : tempKelvin, "celsius": tempCelsius, "fahrenheit": tempFahrenheit };
 };
 
+const showMessage = (message, className) => {
+    const div = document.createElement('div');
+    div.className = `mt-5 col-6 offset-3 alert alert-${className}`;
+    div.appendChild(document.createTextNode(message));
+    const messageContainer = document.querySelector('.container');
+    const form = document.querySelector('.weather-form');
+    messageContainer.insertBefore(div, form);
+    setTimeout(() => document.querySelector('.alert').remove(), 3000);
+};
+
+const acceptLocation = () => {
+    const form = document.querySelector('.weather-form');
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const city = form.querySelector('#city').value;
+        if (city !== '') {
+            
+            document.querySelector('#city').value = '';
+        }
+        else {
+            showMessage('Please fill all fields', 'danger');
+        }
+    });
+};
+
+acceptLocation();
+
 fetchWeather('London,uk');
