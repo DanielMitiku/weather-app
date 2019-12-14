@@ -74,7 +74,9 @@ const fetchImage = (weatherObj) => {
   const imageUrl = `https://api.giphy.com/v1/gifs/translate?api_key=91nozcLeYMCqxY6j7xsh3jqbgnd6zWiV&s=${search}`;
   imageLoader();
   fetch(imageUrl, { mode: 'cors' })
-    .then((response) => response.json())
+    .then((response) => {
+      response.json()
+    })
     .then((response) => {
       descriptionImage.innerHTML = '';
       image.src = response.data.images.original.url;
