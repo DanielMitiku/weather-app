@@ -11,6 +11,14 @@ const loader = () => {
   resultDiv.appendChild(resultP);
 };
 
+const imageLoader = () => {
+  const descriptionImage = document.querySelector('.description-image');
+  const imageP = document.createElement('h2');
+  imageP.classList.add('text-center');
+  descriptionImage.innerText = '...loading...';
+  descriptionImage.appendChild(imageP);
+};
+
 const showMessage = (message, className) => {
   const div = document.createElement('div');
   div.className = `mt-5 col-6 offset-3 alert alert-${className}`;
@@ -23,17 +31,18 @@ const showMessage = (message, className) => {
 };
 
 const weather = (weatherJson, u) => {
+  const { description } = weatherJson.weather[0];
   const tempKelvin = weatherJson.main.temp;
   const tempCelsius = parseFloat((tempKelvin - 273.15).toFixed(2));
   const tempFahrenheit = parseFloat(((tempCelsius) * (9 / 5) + 32).toFixed(2));
   if (u === 'celsius') {
-    return { celsius: tempCelsius };
+    return { celsius: tempCelsius, description };
   }
   if (u === 'kelvin') {
-    return { kelvin: tempKelvin };
+    return { kelvin: tempKelvin, description };
   }
   if (u === 'fahrenheit') {
-    return { fahrenheit: tempFahrenheit };
+    return { fahrenheit: tempFahrenheit, description };
   }
   return null;
 };
@@ -44,14 +53,33 @@ const showWeather = (tempObj, u) => {
   const resultP = document.createElement('h2');
   resultP.classList.add('text-center');
   if (u === 'celsius') {
-    resultP.innerHTML = `The Temperature of the place you entered is ${tempObj.celsius}&#8451;`;
+    resultP.innerHTML = `Temperature: ${tempObj.celsius}&#8451;, Description:  ${tempObj.description}`;
   } else if (u === 'kelvin') {
-    resultP.innerHTML = `The Temperature of the place you entered is ${tempObj.kelvin}K`;
+    resultP.innerHTML = `Temperature: ${tempObj.kelvin}K, Description: ${tempObj.description}`;
   } else if (u === 'fahrenheit') {
-    resultP.innerHTML = `The Temperature of the place you entered is ${tempObj.fahrenheit}&#8457`;
+    resultP.innerHTML = `Temperature: {tempObj.fahrenheit}&#8457, Description: ${tempObj.description}`;
   }
 
   resultDiv.appendChild(resultP);
+};
+
+const fetchImage = (weatherObj) => {
+  const search = `weather${weatherObj.description}`;
+  const descriptionImage = document.querySelector('.description-image');
+  descriptionImage.innerHTML = '';
+  const image = document.createElement('img');
+  image.classList.add('rounded');
+  image.setAttribute('width', '400');
+  image.setAttribute('height', '200');
+  const imageUrl = `https://api.giphy.com/v1/gifs/translate?api_key=91nozcLeYMCqxY6j7xsh3jqbgnd6zWiV&s=${search}`;
+  imageLoader();
+  fetch(imageUrl, { mode: 'cors' })
+    .then((response) => response.json())
+    .then((response) => {
+      descriptionImage.innerHTML = '';
+      image.src = response.data.images.original.url;
+      descriptionImage.appendChild(image);
+    });
 };
 
 const fetchWeather = (location, unit) => {
@@ -70,6 +98,7 @@ const fetchWeather = (location, unit) => {
     .then((response) => {
       const data = response;
       const weatherObj = weather(data, u);
+      fetchImage(weatherObj);
       showWeather(weatherObj, u);
     })
     .catch((err) => {
