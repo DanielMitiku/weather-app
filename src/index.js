@@ -64,7 +64,7 @@ const showWeather = (tempObj, u) => {
   resultDiv.appendChild(resultP);
 };
 
-const imagePromise = (url) => new Promise((resolve, reject) => {
+const imagePromise = url => new Promise((resolve, reject) => {
   const img = new Image();
   img.onload = () => resolve(img);
   img.onerror = () => {
