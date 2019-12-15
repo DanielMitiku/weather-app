@@ -64,17 +64,15 @@ const showWeather = (tempObj, u) => {
   resultDiv.appendChild(resultP);
 };
 
-const imagePromise = (url) => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = () => {
-      const message = `Could not load image at ${url}`;
-      reject(new Error(message));
-    };
-    img.src = url;
-  });
-};
+const imagePromise = (url) => new Promise((resolve, reject) => {
+  const img = new Image();
+  img.onload = () => resolve(img);
+  img.onerror = () => {
+    const message = `Could not load image at ${url}`;
+    reject(new Error(message));
+  };
+  img.src = url;
+});
 
 const fetchImage = (weatherObj) => {
   const search = `weather${weatherObj.description}`;
