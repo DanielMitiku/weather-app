@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Weather-App</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 text-center">Weather App</h1>
+        <form class='mt-4 col-6 offset-3 text-center weather-form'>
+            <div class="form-group">
+                <label for="unit">Temperature Unit</label>
+                <select class="form-control" id="unit">
+                  <option value="celsius">Celsius</option>
+                  <option value="fahrenheit">Fahrenheit</option>
+                  <option value="kelvin">Kelvin</option>
+                </select>
+            </div>
+            <div class="form-group">
+              <label for="city">Please enter the City and you will get the weather of that city</label>
+              <input type="text" class="form-control" id="city" placeholder="Enter city">
+              <small id="emailHelp" class="form-text">Please enter a valid city to know the weather of that particular place</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div class="col-6 offset-3 mt-2 text-center description-image"></div>
+        <div class="mt-4 text-center result">
+        </div>
+    </div>
+<script src="main.js"></script>
+</body>
+</html>
