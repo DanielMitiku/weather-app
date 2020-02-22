@@ -102,10 +102,7 @@ const fetchWeather = (location, unit) => {
       showWeather(weatherObj, u);
     })
     .catch((err) => {
-      showMessage(
-        `Location could not be found. Please try again later!${err}`,
-        'danger',
-      );
+      showMessage(`Location could not be found. Please try again later!${err}`, 'danger');
     });
 };
 
