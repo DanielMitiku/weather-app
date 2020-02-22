@@ -75,7 +75,7 @@ const fetchImage = (weatherObj) => {
   imageLoader();
   fetch(imageUrl, { mode: 'cors' })
     .then(response => response.json())
-    .then(response => {
+    .then((response) => {
       descriptionImage.innerHTML = '';
       image.src = response.data.images.original.url;
       descriptionImage.appendChild(image);
