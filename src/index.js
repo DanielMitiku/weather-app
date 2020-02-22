@@ -28,14 +28,13 @@ const showMessage = (message, className) => {
   messageContainer.insertBefore(div, form);
   setTimeout(() => document.querySelector('.alert').remove(), 3000);
   document.querySelector('.result').innerHTML = '';
-  document.querySelector('.descriptionImage').innerHTML = '';
 };
 
 const weather = (weatherJson, u) => {
   const { description } = weatherJson.weather[0];
   const tempKelvin = weatherJson.main.temp;
   const tempCelsius = parseFloat((tempKelvin - 273.15).toFixed(2));
-  const tempFahrenheit = parseFloat(((tempCelsius) * (9 / 5) + 32).toFixed(2));
+  const tempFahrenheit = parseFloat((tempCelsius * (9 / 5) + 32).toFixed(2));
   if (u === 'celsius') {
     return { celsius: tempCelsius, description };
   }
@@ -64,32 +63,22 @@ const showWeather = (tempObj, u) => {
   resultDiv.appendChild(resultP);
 };
 
-const imagePromise = url => new Promise((resolve, reject) => {
-  const img = new Image();
-  img.onload = () => resolve(img);
-  img.onerror = () => {
-    const message = `Could not load image at ${url}`;
-    reject(new Error(message));
-  };
-  img.src = url;
-});
-
 const fetchImage = (weatherObj) => {
   const search = `weather${weatherObj.description}`;
   const descriptionImage = document.querySelector('.description-image');
   descriptionImage.innerHTML = '';
+  const image = document.createElement('img');
+  image.classList.add('rounded');
+  image.setAttribute('width', '400');
+  image.setAttribute('height', '200');
   const imageUrl = `https://api.giphy.com/v1/gifs/translate?api_key=91nozcLeYMCqxY6j7xsh3jqbgnd6zWiV&s=${search}`;
   imageLoader();
-  imagePromise(imageUrl)
-    .then((img) => {
+  fetch(imageUrl, { mode: 'cors' })
+    .then(response => response.json())
+    .then((response) => {
       descriptionImage.innerHTML = '';
-      descriptionImage.appendChild(img);
-      img.classList.add('rounded');
-      img.setAttribute('width', '400');
-      img.setAttribute('height', '200');
-    })
-    .catch((error) => {
-      showMessage(`Image could not be loaded${error}`, 'danger');
+      image.src = response.data.images.original.url;
+      descriptionImage.appendChild(image);
     });
 };
 
