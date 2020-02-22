@@ -58,7 +58,7 @@ const showWeather = (tempObj, u) => {
   } else if (u === 'kelvin') {
     resultP.innerHTML = `Temperature: ${tempObj.kelvin}K, Description: ${tempObj.description}`;
   } else if (u === 'fahrenheit') {
-    resultP.innerHTML = `Temperature: {tempObj.fahrenheit}&#8457, Description: ${tempObj.description}`;
+    resultP.innerHTML = `Temperature: ${tempObj.fahrenheit}&#8457, Description: ${tempObj.description}`;
   }
 
   resultDiv.appendChild(resultP);
