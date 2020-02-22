@@ -1,33 +1,33 @@
-import "./style.css";
+import './style.css';
 
-const APPID = "f7b60f6f82b5a121d3e5692ae0173a3d";
-const baseURL = "https://api.openweathermap.org/data/2.5/weather";
+const APPID = 'f7b60f6f82b5a121d3e5692ae0173a3d';
+const baseURL = 'https://api.openweathermap.org/data/2.5/weather';
 
 const loader = () => {
-  const resultDiv = document.querySelector(".result");
-  const resultP = document.createElement("h2");
-  resultP.classList.add("text-center");
-  resultDiv.innerText = "...loading...";
+  const resultDiv = document.querySelector('.result');
+  const resultP = document.createElement('h2');
+  resultP.classList.add('text-center');
+  resultDiv.innerText = '...loading...';
   resultDiv.appendChild(resultP);
 };
 
 const imageLoader = () => {
-  const descriptionImage = document.querySelector(".description-image");
-  const imageP = document.createElement("h2");
-  imageP.classList.add("text-center");
-  descriptionImage.innerText = "...loading...";
+  const descriptionImage = document.querySelector('.description-image');
+  const imageP = document.createElement('h2');
+  imageP.classList.add('text-center');
+  descriptionImage.innerText = '...loading...';
   descriptionImage.appendChild(imageP);
 };
 
 const showMessage = (message, className) => {
-  const div = document.createElement("div");
+  const div = document.createElement('div');
   div.className = `mt-5 col-6 offset-3 alert alert-${className}`;
   div.appendChild(document.createTextNode(message));
-  const messageContainer = document.querySelector(".container");
-  const form = document.querySelector(".weather-form");
+  const messageContainer = document.querySelector('.container');
+  const form = document.querySelector('.weather-form');
   messageContainer.insertBefore(div, form);
-  setTimeout(() => document.querySelector(".alert").remove(), 3000);
-  document.querySelector(".result").innerHTML = "";
+  setTimeout(() => document.querySelector('.alert').remove(), 3000);
+  document.querySelector('.result').innerHTML = '';
 };
 
 const weather = (weatherJson, u) => {
@@ -35,48 +35,48 @@ const weather = (weatherJson, u) => {
   const tempKelvin = weatherJson.main.temp;
   const tempCelsius = parseFloat((tempKelvin - 273.15).toFixed(2));
   const tempFahrenheit = parseFloat((tempCelsius * (9 / 5) + 32).toFixed(2));
-  if (u === "celsius") {
+  if (u === 'celsius') {
     return { celsius: tempCelsius, description };
   }
-  if (u === "kelvin") {
+  if (u === 'kelvin') {
     return { kelvin: tempKelvin, description };
   }
-  if (u === "fahrenheit") {
+  if (u === 'fahrenheit') {
     return { fahrenheit: tempFahrenheit, description };
   }
   return null;
 };
 
 const showWeather = (tempObj, u) => {
-  const resultDiv = document.querySelector(".result");
-  resultDiv.innerHTML = "";
-  const resultP = document.createElement("h2");
-  resultP.classList.add("text-center");
-  if (u === "celsius") {
+  const resultDiv = document.querySelector('.result');
+  resultDiv.innerHTML = '';
+  const resultP = document.createElement('h2');
+  resultP.classList.add('text-center');
+  if (u === 'celsius') {
     resultP.innerHTML = `Temperature: ${tempObj.celsius}&#8451;, Description:  ${tempObj.description}`;
-  } else if (u === "kelvin") {
+  } else if (u === 'kelvin') {
     resultP.innerHTML = `Temperature: ${tempObj.kelvin}K, Description: ${tempObj.description}`;
-  } else if (u === "fahrenheit") {
+  } else if (u === 'fahrenheit') {
     resultP.innerHTML = `Temperature: ${tempObj.fahrenheit}&#8457, Description: ${tempObj.description}`;
   }
 
   resultDiv.appendChild(resultP);
 };
 
-const fetchImage = weatherObj => {
+const fetchImage = (weatherObj) => {
   const search = `weather${weatherObj.description}`;
-  const descriptionImage = document.querySelector(".description-image");
-  descriptionImage.innerHTML = "";
-  const image = document.createElement("img");
-  image.classList.add("rounded");
-  image.setAttribute("width", "400");
-  image.setAttribute("height", "200");
+  const descriptionImage = document.querySelector('.description-image');
+  descriptionImage.innerHTML = '';
+  const image = document.createElement('img');
+  image.classList.add('rounded');
+  image.setAttribute('width', '400');
+  image.setAttribute('height', '200');
   const imageUrl = `https://api.giphy.com/v1/gifs/translate?api_key=91nozcLeYMCqxY6j7xsh3jqbgnd6zWiV&s=${search}`;
   imageLoader();
-  fetch(imageUrl, { mode: "cors" })
-    .then(response => response.json())
-    .then(response => {
-      descriptionImage.innerHTML = "";
+  fetch(imageUrl, { mode: 'cors' })
+    .then((response) => response.json())
+    .then((response) => {
+      descriptionImage.innerHTML = '';
       image.src = response.data.images.original.url;
       descriptionImage.appendChild(image);
     });
@@ -87,40 +87,40 @@ const fetchWeather = (location, unit) => {
   const u = unit;
   const urlVar = `${baseURL}?q=${loc}&APPID=${APPID}`;
   loader();
-  fetch(urlVar, { mode: "cors" })
-    .then(response => {
+  fetch(urlVar, { mode: 'cors' })
+    .then((response) => {
       if (!response.ok) {
         throw Error(response.statusText);
       } else {
         return response.json();
       }
     })
-    .then(response => {
+    .then((response) => {
       const data = response;
       const weatherObj = weather(data, u);
       fetchImage(weatherObj);
       showWeather(weatherObj, u);
     })
-    .catch(err => {
+    .catch((err) => {
       showMessage(
         `Location could not be found. Please try again later!${err}`,
-        "danger"
+        'danger',
       );
     });
 };
 
 const acceptLocation = () => {
-  const form = document.querySelector(".weather-form");
-  form.addEventListener("submit", event => {
+  const form = document.querySelector('.weather-form');
+  form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const city = form.querySelector("#city").value;
-    const unit = document.querySelector("#unit").value;
-    if (city !== "" && unit !== "") {
-      document.querySelector(".result").innerHTML = "";
+    const city = form.querySelector('#city').value;
+    const unit = document.querySelector('#unit').value;
+    if (city !== '' && unit !== '') {
+      document.querySelector('.result').innerHTML = '';
       fetchWeather(city, unit);
-      document.querySelector("#city").value = "";
+      document.querySelector('#city').value = '';
     } else {
-      showMessage("Please fill all fields", "danger");
+      showMessage('Please fill all fields', 'danger');
     }
   });
 };
